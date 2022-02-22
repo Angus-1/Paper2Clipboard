@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
 
 void main() {
   runApp(const MyApp());
