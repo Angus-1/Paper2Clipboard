@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
 List<CameraDescription> cameras = <CameraDescription>[];
 
@@ -88,14 +90,42 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _screentap() async {
+    print(">>>>>> tapped!");
+    // Grab a picture from the camera and save it to our temporary directory so
+    // we can feed it to the OCR engine
+    final savedimg = await controller?.takePicture();
+    final savedpath = savedimg!.path;
+    print(">>>>>>> SAVED TO " + savedpath);
+    // Now do ocr on it
+    String ocrTextResult = await FlutterTesseractOcr.extractText(savedpath,
+        language: 'eng',
+        args: {
+          "psm": "4",
+          "preserve_interword_spaces": "1",
+        });
+    print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " + ocrTextResult);
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!controller!.value.isInitialized) {
       return Container();
     }
     return MaterialApp(
-      home: CameraPreview(controller!),
-    );
+        home: Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Clipboard4Paper"),
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        //onTap: () => print('Tapped'),
+        onTap: () => _screentap(),
+        child: CameraPreview(controller!),
+      ),
+    ));
   }
 
   // @override
