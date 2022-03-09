@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
@@ -59,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _text = "Waiting for first scan result...";
   CameraController? controller;
 
   @override
@@ -98,13 +100,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final savedpath = savedimg!.path;
     print(">>>>>>> SAVED TO " + savedpath);
     // Now do ocr on it
-    String ocrTextResult = await FlutterTesseractOcr.extractText(savedpath,
+    String _ocrTextResult = await FlutterTesseractOcr.extractText(savedpath,
         language: 'eng',
         args: {
           "psm": "4",
           "preserve_interword_spaces": "1",
         });
-    print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " + ocrTextResult);
+    print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " + _ocrTextResult);
+    // Now that we have the text, put it on the clipboard
+    Clipboard.setData(ClipboardData(text: _ocrTextResult));
+
+    // Update the UI, showing what text was just scanned and copied.
+    setState(() {
+      _text = _ocrTextResult;
+    });
     return;
   }
 
@@ -117,13 +126,23 @@ class _MyHomePageState extends State<MyHomePage> {
         home: Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Clipboard4Paper"),
+        title: Text("Paper2Clipboard Alpha"),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         //onTap: () => print('Tapped'),
         onTap: () => _screentap(),
-        child: CameraPreview(controller!),
+        //child: CameraPreview(controller!),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '$_text',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            CameraPreview(controller!),
+          ],
+        ),
       ),
     ));
   }
