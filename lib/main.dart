@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
@@ -96,8 +97,17 @@ class _MyHomePageState extends State<MyHomePage> {
     print(">>>>>> tapped!");
     // Grab a picture from the camera and save it to our temporary directory so
     // we can feed it to the OCR engine
+
     final savedimg = await controller?.takePicture();
     final savedpath = savedimg!.path;
+
+    // Fix the save image orientation. The OCR engine needs a correct
+    // orientation to work as expected.
+    final img.Image capturedImage =
+        img.decodeImage(await File(savedpath).readAsBytes())!;
+    final img.Image orientedImage = img.bakeOrientation(capturedImage);
+    await File(savedpath).writeAsBytes(img.encodeJpg(orientedImage));
+
     print(">>>>>>> SAVED TO " + savedpath);
     // Now do ocr on it
     String _ocrTextResult = await FlutterTesseractOcr.extractText(savedpath,
