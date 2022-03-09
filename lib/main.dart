@@ -62,17 +62,37 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _text = "Waiting for first scan result...";
+  bool _scanBusy = false;
   CameraController? controller;
 
   @override
   void initState() {
     super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.max);
+
+    // Initialize the camera and its settings
+    controller = CameraController(cameras[0], ResolutionPreset.low);
     controller?.initialize().then((_) {
       if (!mounted) {
         return;
       }
       setState(() {});
+    });
+    //controller?.setFlashMode(FlashMode.off);
+
+    // Initialize periodic timer for periodic scanning
+    Timer.periodic(const Duration(seconds: 2), (timer) async {
+      print(">>>>>> TIMER TICK! ${timer.tick}");
+
+      String _newText = await _performPicAndScan();
+      // Update the UI, showing what text was just scanned and copied.
+      setState(() {
+        _text = _newText;
+      });
+
+      // if (counter == 0) {
+      //   print('Cancel timer');
+      //   timer.cancel();
+      // }
     });
   }
 
@@ -93,11 +113,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _screentap() async {
-    print(">>>>>> tapped!");
+  Future<String> _performPicAndScan() async {
+    if (_scanBusy) {
+      // Prevent running into exceptions from taking another pic too soon
+      return "";
+    }
+    _scanBusy = true;
     // Grab a picture from the camera and save it to our temporary directory so
     // we can feed it to the OCR engine
 
+    controller?.setFlashMode(FlashMode.off);
     final savedimg = await controller?.takePicture();
     final savedpath = savedimg!.path;
 
@@ -120,10 +145,17 @@ class _MyHomePageState extends State<MyHomePage> {
     // Now that we have the text, put it on the clipboard
     Clipboard.setData(ClipboardData(text: _ocrTextResult));
 
-    // Update the UI, showing what text was just scanned and copied.
-    setState(() {
-      _text = _ocrTextResult;
-    });
+    _scanBusy = false;
+    return _ocrTextResult;
+  }
+
+  void _screentap() async {
+    // print(">>>>>> tapped!");
+    // String _newText = await _performPicAndScan();
+    // // Update the UI, showing what text was just scanned and copied.
+    // setState(() {
+    //   _text = _newText;
+    // });
     return;
   }
 
