@@ -64,6 +64,31 @@ class _MyHomePageState extends State<MyHomePage> {
   String _text = "Waiting for first scan result...";
   bool _scanBusy = false;
   CameraController? controller;
+  var _scanTimer = Timer.periodic(const Duration(seconds: 1), (timer) {});
+  Color _statusColor = Colors.white;
+
+  void _resetScanTimer() {
+    print(">>>> TIMER RESET");
+    _scanTimer.cancel(); // Avoid making multiple timers
+
+    _scanTimer =
+        Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+      print(">>>>>> TIMER TICK! ${timer.tick}");
+
+      String _newText = await _performPicAndScan();
+      // Update the UI, showing what text was just scanned and copied.
+      setState(() {
+        _text = _newText;
+      });
+
+      // if (counter == 0) {
+      //   print('Cancel timer');
+      //   timer.cancel();
+      // }
+    });
+
+    return;
+  }
 
   @override
   void initState() {
@@ -80,20 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //controller?.setFlashMode(FlashMode.off);
 
     // Initialize periodic timer for periodic scanning
-    Timer.periodic(const Duration(seconds: 2), (timer) async {
-      print(">>>>>> TIMER TICK! ${timer.tick}");
-
-      String _newText = await _performPicAndScan();
-      // Update the UI, showing what text was just scanned and copied.
-      setState(() {
-        _text = _newText;
-      });
-
-      // if (counter == 0) {
-      //   print('Cancel timer');
-      //   timer.cancel();
-      // }
-    });
+    //_resetScanTimer();
   }
 
   @override
@@ -159,6 +171,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
+  void _startPeriodicScan() {
+    print(">>>> TOUCHED, STARTING SCAN TIMER");
+    _statusColor = Colors.yellow;
+    // Reset the timer
+    _resetScanTimer();
+    return;
+  }
+
+  void _stopPeriodicScan() {
+    print(">>>> TOUCHED, stopping SCAN TIMER");
+    _statusColor = Colors.white;
+    // Just stop the timer
+    _scanTimer.cancel();
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!controller!.value.isInitialized) {
@@ -174,14 +202,26 @@ class _MyHomePageState extends State<MyHomePage> {
         behavior: HitTestBehavior.opaque,
         //onTap: () => print('Tapped'),
         onTap: () => _screentap(),
+        onTapDown: (details) =>
+            _startPeriodicScan(), // When you start touching the screen
+        onTapUp: (details) =>
+            _stopPeriodicScan(), // When you stop touching the screen
+        onTapCancel: () =>
+            _stopPeriodicScan(), // When you stop touching the screen
         //child: CameraPreview(controller!),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              '$_text',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            // Text(
+            //   '$_text',
+            //   style: Theme.of(context).textTheme.titleLarge,
+            // ),
+            Container(
+                height: 100,
+                width: 350,
+                color: _statusColor,
+                child: FittedBox(fit: BoxFit.fitHeight, child: Text('$_text'))),
+
             CameraPreview(controller!),
           ],
         ),
