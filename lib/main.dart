@@ -1,11 +1,15 @@
 import 'dart:async';
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
+import '../flutter_flow/flutter_flow_theme.dart';
+//import '../flutter_flow/flutter_flow_util.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 List<CameraDescription> cameras = <CameraDescription>[];
 
@@ -189,95 +193,121 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!controller!.value.isInitialized) {
-      return Container();
-    }
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Paper2Clipboard Alpha"),
-      ),
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        //onTap: () => print('Tapped'),
-        onTap: () => _screentap(),
-        onTapDown: (details) =>
-            _startPeriodicScan(), // When you start touching the screen
-        onTapUp: (details) =>
-            _stopPeriodicScan(), // When you stop touching the screen
-        onTapCancel: () =>
-            _stopPeriodicScan(), // When you stop touching the screen
-        //child: CameraPreview(controller!),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Text(
-            //   '$_text',
-            //   style: Theme.of(context).textTheme.titleLarge,
-            // ),
-            Container(
-                height: 100,
-                width: 350,
-                color: _statusColor,
-                child: FittedBox(fit: BoxFit.fitHeight, child: Text('$_text'))),
-
-            CameraPreview(controller!),
-          ],
+    return Scaffold(
+      //key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            children: [
+              Align(
+                alignment: AlignmentDirectional(-0.94, 0.95),
+                child: Icon(
+                  Icons.search_rounded,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 40,
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(-0.47, 0.95),
+                child: Icon(
+                  Icons.content_copy_rounded,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 40,
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0, 0.95),
+                child: Icon(
+                  Icons.crop_rounded,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 40,
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0.47, 0.95),
+                child: Icon(
+                  Icons.edit,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 40,
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0, -0.8),
+                child: Container(
+                  width: 340,
+                  height: 500,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF464646),
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0, 0.75),
+                child: Container(
+                  width: 340,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 78, 78, 78),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0.94, 0.95),
+                child: Icon(
+                  Icons.settings,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 40,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
-
   // @override
   // Widget build(BuildContext context) {
-  //   // This method is rerun every time setState is called, for instance as done
-  //   // by the _incrementCounter method above.
-  //   //
-  //   // The Flutter framework has been optimized to make rerunning build methods
-  //   // fast, so that you can just rebuild anything that needs updating rather
-  //   // than having to individually change instances of widgets.
-  //   return Scaffold(
+  //   if (!controller!.value.isInitialized) {
+  //     return Container();
+  //   }
+  //   return MaterialApp(
+  //       home: Scaffold(
   //     appBar: AppBar(
-  //       // Here we take the value from the MyHomePage object that was created by
-  //       // the App.build method, and use it to set our appbar title.
-  //       title: Text(widget.title),
+  //       centerTitle: true,
+  //       title: Text("Paper2Clipboard Alpha"),
   //     ),
-  //     body: Center(
-  //       // Center is a layout widget. It takes a single child and positions it
-  //       // in the middle of the parent.
+  //     body: GestureDetector(
+  //       behavior: HitTestBehavior.opaque,
+  //       //onTap: () => print('Tapped'),
+  //       onTap: () => _screentap(),
+  //       onTapDown: (details) =>
+  //           _startPeriodicScan(), // When you start touching the screen
+  //       onTapUp: (details) =>
+  //           _stopPeriodicScan(), // When you stop touching the screen
+  //       onTapCancel: () =>
+  //           _stopPeriodicScan(), // When you stop touching the screen
+  //       //child: CameraPreview(controller!),
   //       child: Column(
-  //         // Column is also a layout widget. It takes a list of children and
-  //         // arranges them vertically. By default, it sizes itself to fit its
-  //         // children horizontally, and tries to be as tall as its parent.
-  //         //
-  //         // Invoke "debug painting" (press "p" in the console, choose the
-  //         // "Toggle Debug Paint" action from the Flutter Inspector in Android
-  //         // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-  //         // to see the wireframe for each widget.
-  //         //
-  //         // Column has various properties to control how it sizes itself and
-  //         // how it positions its children. Here we use mainAxisAlignment to
-  //         // center the children vertically; the main axis here is the vertical
-  //         // axis because Columns are vertical (the cross axis would be
-  //         // horizontal).
   //         mainAxisAlignment: MainAxisAlignment.center,
   //         children: <Widget>[
-  //           const Text(
-  //             'You have pushed the button this many times:',
-  //           ),
-  //           Text(
-  //             '$_counter',
-  //             style: Theme.of(context).textTheme.headline4,
-  //           ),
+  //           // Text(
+  //           //   '$_text',
+  //           //   style: Theme.of(context).textTheme.titleLarge,
+  //           // ),
+  //           Container(
+  //               height: 100,
+  //               width: 350,
+  //               color: _statusColor,
+  //               child: FittedBox(fit: BoxFit.fitHeight, child: Text('$_text'))),
+
+  //           CameraPreview(controller!),
   //         ],
   //       ),
   //     ),
-  //     floatingActionButton: FloatingActionButton(
-  //       onPressed: _incrementCounter,
-  //       tooltip: 'Increment',
-  //       child: const Icon(Icons.add),
-  //     ), // This trailing comma makes auto-formatting nicer for build methods.
-  //   );
-  //}
+  //   ));
+  // }
+
 }
