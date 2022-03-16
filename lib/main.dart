@@ -7,6 +7,8 @@ import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import 'package:share_plus/share_plus.dart';
+
 //import '../flutter_flow/flutter_flow_util.dart';
 // import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
@@ -198,8 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: SafeArea(
         child: GestureDetector(
-          //onTap: () => FocusScope.of(context).unfocus(),
-          onTap: () => _screentap(),
+          //onTap: () => FocusScope.of(context).unfocus(), // FlutterFlow added this.
+          //onTap: () => Share.share('$_text'), // How to use the share function. Put this on a button asap.
           onTapDown: (details) =>
               _startPeriodicScan(), // When you start touching the screen
           onTapUp: (details) =>
@@ -260,8 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 224, 224, 224),
                   ),
-                  child:
-                      FittedBox(fit: BoxFit.fitHeight, child: Text('$_text')),
+                  child: FittedBox(fit: BoxFit.fitWidth, child: Text('$_text')),
                 ),
               ),
               Align(
