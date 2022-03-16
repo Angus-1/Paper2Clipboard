@@ -198,7 +198,14 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          //onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => _screentap(),
+          onTapDown: (details) =>
+              _startPeriodicScan(), // When you start touching the screen
+          onTapUp: (details) =>
+              _stopPeriodicScan(), // When you stop touching the screen
+          onTapCancel: () =>
+              _stopPeriodicScan(), // When you stop touching the screen
           child: Stack(
             children: [
               Align(
@@ -242,6 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Color(0xFF464646),
                     shape: BoxShape.rectangle,
                   ),
+                  child: CameraPreview(controller!),
                 ),
               ),
               Align(
@@ -250,8 +258,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 340,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 78, 78, 78),
+                    color: Color.fromARGB(255, 224, 224, 224),
                   ),
+                  child:
+                      FittedBox(fit: BoxFit.fitHeight, child: Text('$_text')),
                 ),
               ),
               Align(
