@@ -13,12 +13,15 @@ import 'package:share_plus/share_plus.dart';
 // import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
+// This app will use the main camera
 List<CameraDescription> cameras = <CameraDescription>[];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Know what cameras we have before starting to use one
   cameras = await availableCameras();
+
   runApp(const MyApp());
 }
 
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Paper2Clipboard: Humble Beginnings'),
+      home: const MyHomePage(title: 'Paper2Clipboard'),
     );
   }
 }
@@ -66,13 +69,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _text = "Waiting for first scan result...";
-  bool _scanBusy = false;
+  // The string text result from the OCR engine will be placed in here.
+  // This string can be shown to the user, and is what gets copied to the
+  // clipboard.
+  String _scannedTextAsString = "Waiting for first scan result...";
+
+  bool _scanBusy = false; // Is the phone busy already scanning something?
+
+  // We change the camera settings and whatnot with this.
   CameraController? controller;
+
+  // Gets initialized later in `_resetScanTimer`. Used to periodically
+  // save a photo and scan it with OCR.
   var _scanTimer = Timer.periodic(const Duration(seconds: 1), (timer) {});
+
+  // May or may not be used on some UI elements to give color feedback.
   Color _statusColor = Colors.white;
 
+  /*
+    (Re)initializes and starts the `_scanTimer`. Run this when you want to begin
+    continual scanning.
+  */
   void _resetScanTimer() {
     print(">>>> TIMER RESET");
     _scanTimer.cancel(); // Avoid making multiple timers
@@ -84,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String _newText = await _performPicAndScan();
       // Update the UI, showing what text was just scanned and copied.
       setState(() {
-        _text = _newText;
+        _scannedTextAsString = _newText;
       });
 
       // if (counter == 0) {
@@ -96,6 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
+  /*
+    Put initialization code here.
+  */
   @override
   void initState() {
     super.initState();
@@ -109,9 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {});
     });
     //controller?.setFlashMode(FlashMode.off);
-
-    // Initialize periodic timer for periodic scanning
-    //_resetScanTimer();
   }
 
   @override
@@ -120,17 +137,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+  /*
+    Calling this function will take a photo from the camera and scan it for
+    text. Due to this, the function takes a significant amount of time to run.
+    Returns the text as a future string.
+  */
   Future<String> _performPicAndScan() async {
     if (_scanBusy) {
       // Prevent running into exceptions from taking another pic too soon
@@ -167,16 +178,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return _ocrTextResult;
   }
 
-  void _screentap() async {
-    // print(">>>>>> tapped!");
-    // String _newText = await _performPicAndScan();
-    // // Update the UI, showing what text was just scanned and copied.
-    // setState(() {
-    //   _text = _newText;
-    // });
-    return;
-  }
-
+  /*
+    Resets the `_scanTimer` and provides feedback of this event. Run this
+    when you want to begin or resume live scanning.
+  */
   void _startPeriodicScan() {
     print(">>>> TOUCHED, STARTING SCAN TIMER");
     _statusColor = Colors.yellow;
@@ -185,6 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
+  /*
+    Cancels the `_scanTimer` and provides feedback of this event. Run this
+    when you want to stop or pause live scanning.
+  */
   void _stopPeriodicScan() {
     print(">>>> TOUCHED, stopping SCAN TIMER");
     _statusColor = Colors.white;
@@ -193,6 +202,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
+  /*
+    Runs when the user wants to share their scanned text. Should be called
+    from a "share" button.
+  */
+  void _shareScannedText() {
+    Share.share('$_scannedTextAsString', subject: 'From my Paper2Clipboard');
+    return;
+  }
+
+  /* -----BUILD----------------------------------------------------------------
+    This is where all the UI code goes! Everything below this point defines
+    the visual structure of this app. After pasting the generated code from
+    FlutterFlow, this is where you make the buttons call functions from above,
+    and where you make other elements display data from variables above.
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,7 +225,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: GestureDetector(
           //onTap: () => FocusScope.of(context).unfocus(), // FlutterFlow added this.
-          //onTap: () => Share.share('$_text'), // How to use the share function. Put this on a button asap.
+          //onTap: () =>
+          //    _shareScannedText(), // How to use the share function. Put this on a button asap.
           onTapDown: (details) =>
               _startPeriodicScan(), // When you start touching the screen
           onTapUp: (details) =>
@@ -262,7 +287,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 224, 224, 224),
                   ),
-                  child: FittedBox(fit: BoxFit.fitWidth, child: Text('$_text')),
+                  child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Text('$_scannedTextAsString')),
                 ),
               ),
               Align(
@@ -279,46 +306,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   if (!controller!.value.isInitialized) {
-  //     return Container();
-  //   }
-  //   return MaterialApp(
-  //       home: Scaffold(
-  //     appBar: AppBar(
-  //       centerTitle: true,
-  //       title: Text("Paper2Clipboard Alpha"),
-  //     ),
-  //     body: GestureDetector(
-  //       behavior: HitTestBehavior.opaque,
-  //       //onTap: () => print('Tapped'),
-  //       onTap: () => _screentap(),
-  //       onTapDown: (details) =>
-  //           _startPeriodicScan(), // When you start touching the screen
-  //       onTapUp: (details) =>
-  //           _stopPeriodicScan(), // When you stop touching the screen
-  //       onTapCancel: () =>
-  //           _stopPeriodicScan(), // When you stop touching the screen
-  //       //child: CameraPreview(controller!),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           // Text(
-  //           //   '$_text',
-  //           //   style: Theme.of(context).textTheme.titleLarge,
-  //           // ),
-  //           Container(
-  //               height: 100,
-  //               width: 350,
-  //               color: _statusColor,
-  //               child: FittedBox(fit: BoxFit.fitHeight, child: Text('$_text'))),
-
-  //           CameraPreview(controller!),
-  //         ],
-  //       ),
-  //     ),
-  //   ));
-  // }
-
 }
