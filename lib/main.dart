@@ -321,7 +321,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             size: 25,
                           ),
                           onPressed: () {
-                            print('shareButton pressed ...');
+                            _shareScannedText();
                           },
                         ),
                       ),
