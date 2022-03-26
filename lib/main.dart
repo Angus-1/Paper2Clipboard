@@ -77,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
   // This string can be shown to the user, and is what gets copied to the
   // clipboard.
   String _scannedTextAsString = "dang";
+  String _findText = "fox";
+
+  bool _findModeActive = false;
 
   bool _scanBusy = false; // Is the phone busy already scanning something?
 
@@ -90,11 +93,42 @@ class _MyHomePageState extends State<MyHomePage> {
   // May or may not be used on some UI elements to give color feedback.
   Color _statusColor = Colors.white;
 
-  TextSpan displayedScannedContents = TextSpan(children: [TextSpan( text: "helloo")]);
+  TextSpan displayedScannedContents =
+      TextSpan(children: [TextSpan(text: "helloo")]);
 
-  //RichText _buildTextSpanWithSplittedText(String textToSplit, context){
-    // https://stackoverflow.com/questions/55839275/flutter-changing-textstyle-of-textspan-with-tapgesturerecognizer
-  //}
+  List<String> _splitKeepSeparator(String haystack, String needle) {
+    //var re = RegExp(r"((?=blue)|(?<=blue))");
+    var re = RegExp("((?=$needle)|(?<=$needle))");
+    return haystack.split(re);
+  }
+
+  Text _buildTextSpanWithSplittedText(String textToSplit,
+      {bool findMode = false}) {
+    //https://stackoverflow.com/questions/55839275/flutter-changing-textstyle-of-textspan-with-tapgesturerecognizer
+    //final splittedText = textToSplit.split(" ");
+    List<TextSpan> spans = []; //List<TextSpan>();
+    if (findMode) {
+      List<String> splittedText = _splitKeepSeparator(textToSplit, _findText);
+      for (int i = 0; i <= splittedText.length - 1; i++) {
+        if (splittedText[i].toString().compareTo(_findText) == 0) {
+          spans.add(TextSpan(
+              text: splittedText[i].toString(),
+              style:
+                  TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold)));
+        } else {
+          spans.add(TextSpan(
+              text: splittedText[i].toString(),
+              style: TextStyle(color: Colors.white)));
+        }
+      }
+    } else {
+      spans.add(TextSpan(
+          text: textToSplit,
+          style: TextStyle(color: Colors.white))); // no splitting
+    }
+
+    return Text.rich(TextSpan(children: spans));
+  }
 
   /*
     (Re)initializes and starts the `_scanTimer`. Run this when you want to begin
@@ -286,17 +320,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           fit: BoxFit.fitHeight,
                           //child: Text(_scannedTextAsString,
                           //    style: const TextStyle(color: Colors.white)),
-                          child: Text.rich(
-                            displayedScannedContents
-                            // TextSpan(children: [
-                            //   TextSpan(text: 'Hello '),
-                            //   TextSpan(text: 'world',
-                            //   style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold),
-                            //   ),
-                            //   TextSpan(text: "."),
-                              
-                            // ])
-                          )
+                          child: _buildTextSpanWithSplittedText(
+                              _scannedTextAsString,
+                              findMode:
+                                  _findModeActive), //Text.rich(displayedScannedContents
+                          // TextSpan(children: [
+                          //   TextSpan(text: 'Hello '),
+                          //   TextSpan(text: 'world',
+                          //   style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold),
+                          //   ),
+                          //   TextSpan(text: "."),
+
+                          // ])
                         ),
                       ),
                     ),
@@ -321,12 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onPressed: () {
                             print('searchButton pressed ...');
-                            setState(() {
-                              displayedScannedContents.children?.add(TextSpan(text: "$_scannedTextAsString "));
-                              //displayedScannedContents.children?[0] = "ugh";
-                            });
-                            print(">>>> displayedScannedContents: ${displayedScannedContents}");
-                            print(">>>> displayedScannedContents child: ${displayedScannedContents}");
+                            _findModeActive = !_findModeActive;
                           },
                         ),
                       ),
