@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 //import '../flutter_flow/flutter_flow_util.dart';
@@ -23,6 +24,9 @@ Future<void> main() async {
   cameras = await availableCameras();
 
   runApp(const MyApp());
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Color.fromARGB(255, 0, 0, 0),
+      systemNavigationBarIconBrightness: Brightness.light));
 }
 
 class MyApp extends StatelessWidget {
@@ -138,6 +142,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /*
+    For the search feature. Will find every needle in haystack, and populate
+    a list
+  */
+  int stringSearch(String haystack, String needle, List<int> matches) {
+    return 0;
+  }
+
+  /*
     Calling this function will take a photo from the camera and scan it for
     text. Due to this, the function takes a significant amount of time to run.
     Returns the text as a future string.
@@ -173,6 +185,9 @@ class _MyHomePageState extends State<MyHomePage> {
     print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " + _ocrTextResult);
     // Now that we have the text, put it on the clipboard
     Clipboard.setData(ClipboardData(text: _ocrTextResult));
+
+    // We're done, now clean up the cache
+    await File(savedpath).delete();
 
     _scanBusy = false;
     return _ocrTextResult;
@@ -221,12 +236,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: GestureDetector(
-          //onTap: () => FocusScope.of(context).unfocus(), // FlutterFlow added this.
-          //onTap: () =>
-          //    _shareScannedText(), // How to use the share function. Put this on a button asap.
+          //onTap: () => FocusScope.of(context).unfocus(),
           onTapDown: (details) =>
               _startPeriodicScan(), // When you start touching the screen
           onTapUp: (details) =>
@@ -235,70 +248,146 @@ class _MyHomePageState extends State<MyHomePage> {
               _stopPeriodicScan(), // When you stop touching the screen
           child: Stack(
             children: [
-              Align(
-                alignment: AlignmentDirectional(-0.94, 0.95),
-                child: Icon(
-                  Icons.search_rounded,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 40,
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-0.47, 0.95),
-                child: Icon(
-                  Icons.content_copy_rounded,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 40,
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0, 0.95),
-                child: Icon(
-                  Icons.crop_rounded,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 40,
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.47, 0.95),
-                child: Icon(
-                  Icons.edit,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 40,
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0, -0.8),
-                child: Container(
-                  width: 340,
-                  height: 500,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF464646),
-                    shape: BoxShape.rectangle,
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(0, -0.98),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 20),
+                      child: Container(
+                        width: 340,
+                        height: 480,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF464646),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: CameraPreview(controller!),
+                      ),
+                    ),
                   ),
-                  child: CameraPreview(controller!),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0, 0.75),
-                child: Container(
-                  width: 340,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 224, 224, 224),
+                  Align(
+                    alignment: AlignmentDirectional(0, 0.78),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                      child: Container(
+                        width: 340,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF323131),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Text(_scannedTextAsString,
+                              style: const TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Text('$_scannedTextAsString')),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.94, 0.95),
-                child: Icon(
-                  Icons.settings,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 40,
-                ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-0.94, 0.95),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.black,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: Colors.black,
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            print('searchButton pressed ...');
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(-0.47, 0.95),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: Colors.black,
+                          icon: Icon(
+                            Icons.share_sharp,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            print('shareButton pressed ...');
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0, 0.95),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: Colors.black,
+                          icon: Icon(
+                            Icons.photo_size_select_small,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            print('selectionIcon pressed ...');
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.47, 0.95),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: Colors.black,
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            print('editIcon pressed ...');
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.94, 0.95),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: Colors.black,
+                          icon: Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                          onPressed: () async {
+                            print("boop");
+                            // await Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => SettingsPageWidget(),
+                            //   ),
+                            // );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -306,4 +395,93 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     //key: scaffoldKey,
+  //     backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+  //     body: SafeArea(
+  //       child: GestureDetector(
+  //         //onTap: () => FocusScope.of(context).unfocus(), // FlutterFlow added this.
+  //         //onTap: () =>
+  //         //    _shareScannedText(), // How to use the share function. Put this on a button asap.
+  //         onTapDown: (details) =>
+  //             _startPeriodicScan(), // When you start touching the screen
+  //         onTapUp: (details) =>
+  //             _stopPeriodicScan(), // When you stop touching the screen
+  //         onTapCancel: () =>
+  //             _stopPeriodicScan(), // When you stop touching the screen
+  //         child: Stack(
+  //           children: [
+  //             Align(
+  //               alignment: AlignmentDirectional(-0.94, 0.95),
+  //               child: Icon(
+  //                 Icons.search_rounded,
+  //                 color: FlutterFlowTheme.of(context).primaryColor,
+  //                 size: 40,
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(-0.47, 0.95),
+  //               child: Icon(
+  //                 Icons.content_copy_rounded,
+  //                 color: FlutterFlowTheme.of(context).primaryColor,
+  //                 size: 40,
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(0, 0.95),
+  //               child: Icon(
+  //                 Icons.crop_rounded,
+  //                 color: FlutterFlowTheme.of(context).primaryColor,
+  //                 size: 40,
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(0.47, 0.95),
+  //               child: Icon(
+  //                 Icons.edit,
+  //                 color: FlutterFlowTheme.of(context).primaryColor,
+  //                 size: 40,
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(0, -0.8),
+  //               child: Container(
+  //                 width: 340,
+  //                 height: 500,
+  //                 decoration: BoxDecoration(
+  //                   color: Color(0xFF464646),
+  //                   shape: BoxShape.rectangle,
+  //                 ),
+  //                 child: CameraPreview(controller!),
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(0, 0.75),
+  //               child: Container(
+  //                 width: 340,
+  //                 height: 120,
+  //                 decoration: BoxDecoration(
+  //                   color: Color.fromARGB(255, 224, 224, 224),
+  //                 ),
+  //                 child: FittedBox(
+  //                     fit: BoxFit.fitHeight,
+  //                     child: Text('$_scannedTextAsString')),
+  //               ),
+  //             ),
+  //             Align(
+  //               alignment: AlignmentDirectional(0.94, 0.95),
+  //               child: Icon(
+  //                 Icons.settings,
+  //                 color: FlutterFlowTheme.of(context).primaryColor,
+  //                 size: 40,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
