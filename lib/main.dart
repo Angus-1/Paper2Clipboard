@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // The string text result from the OCR engine will be placed in here.
   // This string can be shown to the user, and is what gets copied to the
   // clipboard.
-  String _scannedTextAsString = "Waiting for first scan result...";
+  String _scannedTextAsString = "dang";
 
   bool _scanBusy = false; // Is the phone busy already scanning something?
 
@@ -89,6 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // May or may not be used on some UI elements to give color feedback.
   Color _statusColor = Colors.white;
+
+  TextSpan displayedScannedContents = TextSpan(children: [TextSpan( text: "helloo")]);
+
+  //RichText _buildTextSpanWithSplittedText(String textToSplit, context){
+    // https://stackoverflow.com/questions/55839275/flutter-changing-textstyle-of-textspan-with-tapgesturerecognizer
+  //}
 
   /*
     (Re)initializes and starts the `_scanTimer`. Run this when you want to begin
@@ -278,8 +284,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
-                          child: Text(_scannedTextAsString,
-                              style: const TextStyle(color: Colors.white)),
+                          //child: Text(_scannedTextAsString,
+                          //    style: const TextStyle(color: Colors.white)),
+                          child: Text.rich(
+                            displayedScannedContents
+                            // TextSpan(children: [
+                            //   TextSpan(text: 'Hello '),
+                            //   TextSpan(text: 'world',
+                            //   style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold),
+                            //   ),
+                            //   TextSpan(text: "."),
+                              
+                            // ])
+                          )
                         ),
                       ),
                     ),
@@ -304,6 +321,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onPressed: () {
                             print('searchButton pressed ...');
+                            setState(() {
+                              displayedScannedContents.children?.add(TextSpan(text: "$_scannedTextAsString "));
+                              //displayedScannedContents.children?[0] = "ugh";
+                            });
+                            print(">>>> displayedScannedContents: ${displayedScannedContents}");
+                            print(">>>> displayedScannedContents child: ${displayedScannedContents}");
                           },
                         ),
                       ),
