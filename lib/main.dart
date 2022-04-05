@@ -9,6 +9,8 @@ import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:image_picker/image_picker.dart';
+//import '../settingsPage.dart';
 
 //import '../flutter_flow/flutter_flow_util.dart';
 // import 'package:flutter/material.dart';
@@ -97,7 +99,6 @@ class _MyHomePageState extends State<MyHomePage> {
       TextSpan(children: [TextSpan(text: "helloo")]);
 
   List<String> _splitKeepSeparator(String haystack, String needle) {
-    //var re = RegExp(r"((?=blue)|(?<=blue))");
     var re = RegExp("((?=$needle)|(?<=$needle))");
     return haystack.split(re);
   }
@@ -409,8 +410,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.white,
                             size: 25,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             print('editIcon pressed ...');
+                            // For now use this to pick an image
+                            final ImagePicker _picker = ImagePicker();
+                            final XFile? image = await _picker.pickImage(
+                                source: ImageSource.gallery);
+                            final String imagePath = image!.path;
+                            String _ocrTextResult =
+                                await FlutterTesseractOcr.extractText(imagePath,
+                                    language: 'eng',
+                                    args: {
+                                  "psm": "4",
+                                  "preserve_interword_spaces": "1",
+                                });
+                            print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " +
+                                _ocrTextResult);
+                            setState(() {
+                              _scannedTextAsString = _ocrTextResult;
+                            });
                           },
                         ),
                       ),
