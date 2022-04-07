@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // clipboard.
   String _scannedTextAsString = "dang";
   String _findText = "fox";
+  final double _outputFontSize = 16.0;
 
   bool _findModeActive = false;
 
@@ -98,6 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
   TextSpan displayedScannedContents =
       TextSpan(children: [TextSpan(text: "helloo")]);
 
+  FocusNode _focusNode = FocusNode();
+
   List<String> _splitKeepSeparator(String haystack, String needle) {
     var re = RegExp("((?=$needle)|(?<=$needle))");
     return haystack.split(re);
@@ -114,18 +117,21 @@ class _MyHomePageState extends State<MyHomePage> {
         if (splittedText[i].toString().compareTo(_findText) == 0) {
           spans.add(TextSpan(
               text: splittedText[i].toString(),
-              style:
-                  TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold)));
+              style: TextStyle(
+                  color: Colors.yellow,
+                  fontWeight: FontWeight.bold,
+                  fontSize: _outputFontSize)));
         } else {
           spans.add(TextSpan(
               text: splittedText[i].toString(),
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(color: Colors.cyan, fontSize: _outputFontSize)));
         }
       }
     } else {
       spans.add(TextSpan(
           text: textToSplit,
-          style: TextStyle(color: Colors.white, fontSize: 16))); // no splitting
+          style: TextStyle(
+              color: Colors.white, fontSize: _outputFontSize))); // no splitting
     }
 
     return Text.rich(TextSpan(children: spans));
@@ -175,12 +181,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    //_focusNode = FocusNode();
+    _focusNode.addListener(() {
+      print(">>>> Listener");
+    });
+
     initCamera(ResolutionPreset.low);
     //controller?.setFlashMode(FlashMode.off);
   }
 
   @override
   void dispose() {
+    _focusNode.dispose();
     controller?.dispose();
     super.dispose();
   }
@@ -270,6 +283,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
+  void _showKeyboard() {
+    //_focusNode.requestFocus();
+    FocusScope.of(context).requestFocus(_focusNode);
+  }
+
+  void _hideKeyboard() {
+    FocusScope.of(context).unfocus();
+  }
+
+  void _searchButtonPressed() {
+    print('searchButton pressed ...');
+
+    _findModeActive = !_findModeActive;
+    if (_findModeActive) {
+      _showKeyboard();
+    } else {
+      _hideKeyboard();
+    }
+  }
+
   /* -----BUILD----------------------------------------------------------------
     This is where all the UI code goes! Everything below this point defines
     the visual structure of this app. After pasting the generated code from
@@ -295,6 +328,19 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
+                  Container(
+                    height: 8,
+                    child: TextField(
+                      autofocus: false,
+                      focusNode: _focusNode,
+                      onChanged: (String value) {
+                        print(">>>> finding " + value);
+                        setState(() {
+                          _findText = value;
+                        });
+                      },
+                    ),
+                  ),
                   Align(
                     alignment: AlignmentDirectional(0, -0.98),
                     child: Padding(
@@ -357,8 +403,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             size: 25,
                           ),
                           onPressed: () {
-                            print('searchButton pressed ...');
-                            _findModeActive = !_findModeActive;
+                            _searchButtonPressed();
                           },
                         ),
                       ),
