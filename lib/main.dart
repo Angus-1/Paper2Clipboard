@@ -426,6 +426,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 });
                             print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " +
                                 _ocrTextResult);
+                            // Now that we have the text, put it on the clipboard
+                            Clipboard.setData(
+                                ClipboardData(text: _ocrTextResult));
                             setState(() {
                               _scannedTextAsString = _ocrTextResult;
                             });
@@ -466,93 +469,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     //key: scaffoldKey,
-  //     backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-  //     body: SafeArea(
-  //       child: GestureDetector(
-  //         //onTap: () => FocusScope.of(context).unfocus(), // FlutterFlow added this.
-  //         //onTap: () =>
-  //         //    _shareScannedText(), // How to use the share function. Put this on a button asap.
-  //         onTapDown: (details) =>
-  //             _startPeriodicScan(), // When you start touching the screen
-  //         onTapUp: (details) =>
-  //             _stopPeriodicScan(), // When you stop touching the screen
-  //         onTapCancel: () =>
-  //             _stopPeriodicScan(), // When you stop touching the screen
-  //         child: Stack(
-  //           children: [
-  //             Align(
-  //               alignment: AlignmentDirectional(-0.94, 0.95),
-  //               child: Icon(
-  //                 Icons.search_rounded,
-  //                 color: FlutterFlowTheme.of(context).primaryColor,
-  //                 size: 40,
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(-0.47, 0.95),
-  //               child: Icon(
-  //                 Icons.content_copy_rounded,
-  //                 color: FlutterFlowTheme.of(context).primaryColor,
-  //                 size: 40,
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(0, 0.95),
-  //               child: Icon(
-  //                 Icons.crop_rounded,
-  //                 color: FlutterFlowTheme.of(context).primaryColor,
-  //                 size: 40,
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(0.47, 0.95),
-  //               child: Icon(
-  //                 Icons.edit,
-  //                 color: FlutterFlowTheme.of(context).primaryColor,
-  //                 size: 40,
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(0, -0.8),
-  //               child: Container(
-  //                 width: 340,
-  //                 height: 500,
-  //                 decoration: BoxDecoration(
-  //                   color: Color(0xFF464646),
-  //                   shape: BoxShape.rectangle,
-  //                 ),
-  //                 child: CameraPreview(controller!),
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(0, 0.75),
-  //               child: Container(
-  //                 width: 340,
-  //                 height: 120,
-  //                 decoration: BoxDecoration(
-  //                   color: Color.fromARGB(255, 224, 224, 224),
-  //                 ),
-  //                 child: FittedBox(
-  //                     fit: BoxFit.fitHeight,
-  //                     child: Text('$_scannedTextAsString')),
-  //               ),
-  //             ),
-  //             Align(
-  //               alignment: AlignmentDirectional(0.94, 0.95),
-  //               child: Icon(
-  //                 Icons.settings,
-  //                 color: FlutterFlowTheme.of(context).primaryColor,
-  //                 size: 40,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
