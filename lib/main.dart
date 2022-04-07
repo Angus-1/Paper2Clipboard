@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       spans.add(TextSpan(
           text: textToSplit,
-          style: TextStyle(color: Colors.white))); // no splitting
+          style: TextStyle(color: Colors.white, fontSize: 16))); // no splitting
     }
 
     return Text.rich(TextSpan(children: spans));
@@ -158,21 +158,24 @@ class _MyHomePageState extends State<MyHomePage> {
     return;
   }
 
-  /*
-    Put initialization code here.
-  */
-  @override
-  void initState() {
-    super.initState();
-
+  void initCamera(ResolutionPreset resolution) {
     // Initialize the camera and its settings
-    controller = CameraController(cameras[0], ResolutionPreset.low);
+    controller = CameraController(cameras[0], resolution);
     controller?.initialize().then((_) {
       if (!mounted) {
         return;
       }
       setState(() {});
     });
+  }
+
+  /*
+    Put initialization code here.
+  */
+  @override
+  void initState() {
+    super.initState();
+    initCamera(ResolutionPreset.low);
     //controller?.setFlashMode(FlashMode.off);
   }
 
@@ -317,22 +320,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         decoration: BoxDecoration(
                           color: Color(0xFF323131),
                         ),
-                        child: FittedBox(
-                          fit: BoxFit.fitHeight,
-                          //child: Text(_scannedTextAsString,
-                          //    style: const TextStyle(color: Colors.white)),
+                        // child: FittedBox(
+                        //   fit: BoxFit.fitHeight,
+                        //   child: SingleChildScrollView(
+                        //     scrollDirection: Axis.vertical,
+                        //     child: _buildTextSpanWithSplittedText(
+                        //         _scannedTextAsString,
+                        //         findMode: _findModeActive),
+                        //   ),
+                        // ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
                           child: _buildTextSpanWithSplittedText(
                               _scannedTextAsString,
-                              findMode:
-                                  _findModeActive), //Text.rich(displayedScannedContents
-                          // TextSpan(children: [
-                          //   TextSpan(text: 'Hello '),
-                          //   TextSpan(text: 'world',
-                          //   style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold),
-                          //   ),
-                          //   TextSpan(text: "."),
-
-                          // ])
+                              findMode: _findModeActive),
                         ),
                       ),
                     ),
