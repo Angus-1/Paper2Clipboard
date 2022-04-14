@@ -16,6 +16,9 @@ import 'package:camera/camera.dart';
 // This app will use the main camera
 List<CameraDescription> cameras = <CameraDescription>[];
 
+// Resolution preference
+ResolutionPreset resolutionPreference = ResolutionPreset.low;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

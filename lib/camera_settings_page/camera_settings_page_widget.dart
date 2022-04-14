@@ -1,3 +1,6 @@
+import 'package:camera/camera.dart';
+import 'package:paper2clipboard/main.dart';
+
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_radio_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -17,6 +20,33 @@ class CameraSettingsPageWidget extends StatefulWidget {
 class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
   String radioButtonValue = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _changeResolutionPrefFromStr(value) {
+    switch (value) {
+      case 'Low':
+        resolutionPreference = ResolutionPreset.low;
+        break;
+      case 'Medium':
+        resolutionPreference = ResolutionPreset.medium;
+        break;
+      case 'High':
+        resolutionPreference = ResolutionPreset.high;
+        break;
+      case 'Very High':
+        resolutionPreference = ResolutionPreset.veryHigh;
+        break;
+      case 'Ultra High':
+        resolutionPreference = ResolutionPreset.ultraHigh;
+        break;
+      case 'Max':
+        resolutionPreference = ResolutionPreset.max;
+        break;
+      default:
+        print("Incorrect resolution option \"$value\"");
+        resolutionPreference = ResolutionPreset.low;
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

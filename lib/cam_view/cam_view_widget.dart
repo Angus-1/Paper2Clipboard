@@ -157,7 +157,8 @@ class _CamViewWidgetState extends State<CamViewWidget> {
       print(">>>> Listener");
     });
 
-    initCamera(ResolutionPreset.low);
+    //initCamera(ResolutionPreset.low);
+    initCamera(resolutionPreference);
     //controller?.setFlashMode(FlashMode.off);
   }
 
