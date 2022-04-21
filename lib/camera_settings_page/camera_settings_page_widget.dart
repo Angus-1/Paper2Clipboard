@@ -53,7 +53,7 @@ class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D0000),
+        //backgroundColor: FlutterFlowTheme.of(context).bannerColor,  ERROR
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -99,25 +99,37 @@ class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(5, 20, 0, 0),
                 child: Text(
                   'Camera Resolution',
-                  style: FlutterFlowTheme.of(context).bodyText1,
+                  style: FlutterFlowTheme.of(context).subtitle1.override(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                      ),
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                 child: FlutterFlowRadioButton(
-                  options: ['Super High', 'High', 'Medium', 'Low'].toList(),
+                  options: [
+                    'Low',
+                    'Medium',
+                    'High',
+                    'Very High',
+                    'Ultra High',
+                    'Max'
+                  ].toList(),
                   onChanged: (value) {
                     setState(() => radioButtonValue = value.toString());
+                    _changeResolutionPrefFromStr(value);
                   },
                   optionHeight: 25,
                   textStyle: FlutterFlowTheme.of(context).bodyText1.override(
                         fontFamily: 'Poppins',
-                        color: Color(0xFFFBFBFB),
+                        color: FlutterFlowTheme.of(context).secondaryText,
                       ),
                   buttonPosition: RadioButtonPosition.left,
                   direction: Axis.vertical,
                   radioButtonColor: Color(0xFF950101),
-                  inactiveRadioButtonColor: Color(0xFFFBFBFB),
+                  inactiveRadioButtonColor:
+                      FlutterFlowTheme.of(context).secondaryText,
                   toggleable: false,
                   horizontalAlignment: WrapAlignment.start,
                   verticalAlignment: WrapCrossAlignment.start,
