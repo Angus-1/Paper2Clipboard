@@ -53,7 +53,10 @@ class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        //backgroundColor: FlutterFlowTheme.of(context).bannerColor,  ERROR
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //The following line produced an error when testing the application. Will have to return to correct this.
+        //backgroundColor: FlutterFlowTheme.of(context).bannerColor
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
