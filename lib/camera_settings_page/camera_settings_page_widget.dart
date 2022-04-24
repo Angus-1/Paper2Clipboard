@@ -1,3 +1,7 @@
+/*
+Import a bunch of useful libraries/functions.
+*/
+
 import 'package:camera/camera.dart';
 import 'package:paper2clipboard/main.dart';
 
@@ -20,9 +24,10 @@ class CameraSettingsPageWidget extends StatefulWidget {
 class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
   String radioButtonValue = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // Switch: Options to select from are Low, Medium, High, Very High, Ultra High, and Max.
-  // From  those selected option, do what is expected of that choice, that is, set the resolution to Low, Medium, High, Very High, Ultra High, or Max.
-  // If neither of those options are selected, then break and inform the user that they have selected an invalid option.
+  /* Switch: Options to select from are Low, Medium, High, Very High, Ultra High, and Max.
+     From  those selected option, do what is expected of that choice, that is, set the resolution to Low, Medium, High, Very High, Ultra High, or Max.
+     If neither of those options are selected, then break and inform the user that they have selected an invalid option.
+  */
   void _changeResolutionPrefFromStr(value) {
     switch (value) {
       case 'Low':
