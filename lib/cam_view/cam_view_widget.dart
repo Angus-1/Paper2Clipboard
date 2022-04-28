@@ -137,8 +137,12 @@ class _CamViewWidgetState extends State<CamViewWidget>
       if (!mounted) {
         return;
       }
+      // Make sure auto focus and auto exposure are on
+      controller?.setFocusMode(FocusMode.auto);
+      controller?.setExposureMode(ExposureMode.auto);
       setState(() {});
     });
+
     //});
   }
 
