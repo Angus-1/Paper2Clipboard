@@ -28,8 +28,12 @@ class CamViewWidget extends StatefulWidget {
   _CamViewWidgetState createState() => _CamViewWidgetState();
 }
 
-class _CamViewWidgetState extends State<CamViewWidget> {
+class _CamViewWidgetState extends State<CamViewWidget>
+    with WidgetsBindingObserver {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // This variable will tell you whether the application is in foreground or not.
+  bool _isInForeground = true;
 
   // The string text result from the OCR engine will be placed in here.
   // This string can be shown to the user, and is what gets copied to the
@@ -160,13 +164,36 @@ class _CamViewWidgetState extends State<CamViewWidget> {
     //initCamera(ResolutionPreset.low);
     initCamera(resolutionPreference);
     //controller?.setFlashMode(FlashMode.off);
+
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
     controller?.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("app in resumed");
+        initCamera(
+            resolutionPreference); // Reinitialize camera incase it got deactivated
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+    }
   }
 
   /*
