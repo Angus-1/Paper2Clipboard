@@ -21,7 +21,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D0000),
+        backgroundColor: Color(0xFF1B1B1B),
         automaticallyImplyLeading: false,
         title: Align(
           alignment: AlignmentDirectional(0, 0),
@@ -39,7 +39,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         centerTitle: false,
         elevation: 2,
       ),
-      backgroundColor: Color(0xFF181818),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -49,7 +49,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(90, 0, 90, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     await Navigator.push(
@@ -61,9 +61,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   },
                   text: 'Start Scanning',
                   options: FFButtonOptions(
-                    width: 140,
+                    width: 200,
                     height: 40,
-                    color: Color(0xFF950101),
+                    color: Color(0xFF1B1B1B),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
                           color: Colors.white,
@@ -77,16 +77,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(90, 10, 90, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                 child: FFButtonWidget(
                   onPressed: () {
                     print('helpButton pressed ...');
                   },
                   text: 'Help',
                   options: FFButtonOptions(
-                    width: 140,
+                    width: 200,
                     height: 40,
-                    color: Color(0xFF950101),
+                    color: Color(0xFF1B1B1B),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
                           color: Colors.white,
@@ -100,7 +100,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(90, 10, 90, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     await Navigator.push(
@@ -112,9 +112,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   },
                   text: 'Settings',
                   options: FFButtonOptions(
-                    width: 140,
+                    width: 200,
                     height: 40,
-                    color: Color(0xFF950101),
+                    color: Color(0xFF1B1B1B),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
                           color: Colors.white,
