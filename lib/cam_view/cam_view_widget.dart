@@ -42,7 +42,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
   String _findText = "fox";
   final double _outputFontSize = 16.0;
 
-  bool _findModeActive = false;
+  bool _findModeActive = true;
 
   bool _scanBusy = false; // Is the phone busy already scanning something?
 
@@ -61,13 +61,21 @@ class _CamViewWidgetState extends State<CamViewWidget>
 
   FocusNode _focusNode = FocusNode();
 
+  // for searching
+  TextEditingController textController = TextEditingController();
+
+  // for manual focus
+   double sliderValue = 0.0;
+
+  bool _torchActive = false;
+
   List<String> _splitKeepSeparator(String haystack, String needle) {
     var re = RegExp("((?=$needle)|(?<=$needle))");
     return haystack.split(re);
   }
 
   Text _buildTextSpanWithSplittedText(String textToSplit,
-      {bool findMode = false}) {
+      {bool findMode = true}) {
     //https://stackoverflow.com/questions/55839275/flutter-changing-textstyle-of-textspan-with-tapgesturerecognizer
     //final splittedText = textToSplit.split(" ");
     List<TextSpan> spans = []; //List<TextSpan>();
@@ -78,20 +86,20 @@ class _CamViewWidgetState extends State<CamViewWidget>
           spans.add(TextSpan(
               text: splittedText[i].toString(),
               style: TextStyle(
-                  color: Colors.yellow,
+                  color: Colors.cyan,
                   fontWeight: FontWeight.bold,
                   fontSize: _outputFontSize)));
         } else {
           spans.add(TextSpan(
               text: splittedText[i].toString(),
-              style: TextStyle(color: Colors.cyan, fontSize: _outputFontSize)));
+              style: TextStyle(color: Colors.black, fontSize: _outputFontSize)));
         }
       }
     } else {
       spans.add(TextSpan(
           text: textToSplit,
           style: TextStyle(
-              color: Colors.white, fontSize: _outputFontSize))); // no splitting
+              color: Color.fromARGB(255, 0, 0, 0), fontSize: _outputFontSize))); // no splitting
     }
 
     return Text.rich(TextSpan(children: spans));
@@ -170,6 +178,8 @@ class _CamViewWidgetState extends State<CamViewWidget>
     //controller?.setFlashMode(FlashMode.off);
 
     WidgetsBinding.instance!.addObserver(this);
+
+    textController = TextEditingController();
   }
 
   @override
@@ -268,14 +278,190 @@ class _CamViewWidgetState extends State<CamViewWidget>
     and where you make other elements display data from variables above.
   */
   @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     key: scaffoldKey,
+  //     backgroundColor: Color(0xFF181818),
+  //     body: SafeArea(
+  //       child: GestureDetector(
+  //         //onTap: () => FocusScope.of(context).unfocus(),
+  //         onTapDown: (details) =>
+  //             _startPeriodicScan(), // When you start touching the screen
+  //         onTapUp: (details) =>
+  //             _stopPeriodicScan(), // When you stop touching the screen
+  //         onTapCancel: () =>
+  //             _stopPeriodicScan(), // When you stop touching the screen
+  //         child: Stack(
+  //           children: [
+  //             Column(
+  //               mainAxisSize: MainAxisSize.max,
+  //               children: [
+  //                 Align(
+  //                   alignment: AlignmentDirectional(0, -0.98),
+  //                   child: Padding(
+  //                     padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 20),
+  //                     child: Container(
+  //                       width: 340,
+  //                       height: 480,
+  //                       decoration: BoxDecoration(
+  //                         color: Color(0xFF464646),
+  //                         shape: BoxShape.rectangle,
+  //                       ),
+  //                       child: CameraPreview(controller!),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Align(
+  //                   alignment: AlignmentDirectional(0, 0.78),
+  //                   child: Padding(
+  //                     padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+  //                     child: Container(
+  //                       width: 340,
+  //                       height: 120,
+  //                       decoration: BoxDecoration(
+  //                         color: Color(0xFF323131),
+  //                         //color: Color(0xFF0000FF),
+  //                         shape: BoxShape.rectangle,
+  //                       ),
+  //                       child: SingleChildScrollView(
+  //                         scrollDirection: Axis.vertical,
+  //                         child: _buildTextSpanWithSplittedText(
+  //                             _scannedTextAsString,
+  //                             findMode: _findModeActive),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Row(
+  //                   mainAxisSize: MainAxisSize.max,
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   crossAxisAlignment: CrossAxisAlignment.end,
+  //                   children: [
+  //                     Align(
+  //                       alignment: AlignmentDirectional(-0.94, 0.95),
+  //                       child: FlutterFlowIconButton(
+  //                         borderColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         borderRadius: 30,
+  //                         borderWidth: 0,
+  //                         buttonSize: 40,
+  //                         fillColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         icon: Icon(
+  //                           Icons.search,
+  //                           color: Colors.white,
+  //                           size: 25,
+  //                         ),
+  //                         onPressed: () {
+  //                           _searchButtonPressed();
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Align(
+  //                       alignment: AlignmentDirectional(-0.47, 0.95),
+  //                       child: FlutterFlowIconButton(
+  //                         borderColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         borderRadius: 30,
+  //                         borderWidth: 0,
+  //                         buttonSize: 40,
+  //                         fillColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         icon: Icon(
+  //                           Icons.share_sharp,
+  //                           color: Colors.white,
+  //                           size: 25,
+  //                         ),
+  //                         onPressed: () {
+  //                           print('shareButton pressed ...');
+  //                           _shareScannedText();
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Align(
+  //                       alignment: AlignmentDirectional(0, 0.95),
+  //                       child: FlutterFlowIconButton(
+  //                         borderColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         borderRadius: 30,
+  //                         borderWidth: 0,
+  //                         buttonSize: 40,
+  //                         fillColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         icon: Icon(
+  //                           Icons.photo_size_select_small,
+  //                           color: Colors.white,
+  //                           size: 25,
+  //                         ),
+  //                         onPressed: () {
+  //                           print('selectionIcon pressed ...');
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Align(
+  //                       alignment: AlignmentDirectional(0.47, 0.95),
+  //                       child: FlutterFlowIconButton(
+  //                         borderColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         borderRadius: 30,
+  //                         borderWidth: 0,
+  //                         buttonSize: 40,
+  //                         fillColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         icon: Icon(
+  //                           Icons.edit,
+  //                           color: Colors.white,
+  //                           size: 25,
+  //                         ),
+  //                         onPressed: () {
+  //                           print('editIcon pressed ...');
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Align(
+  //                       alignment: AlignmentDirectional(0.94, 0.95),
+  //                       child: FlutterFlowIconButton(
+  //                         borderColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         borderRadius: 30,
+  //                         borderWidth: 0,
+  //                         buttonSize: 40,
+  //                         fillColor:
+  //                             FlutterFlowTheme.of(context).primaryBackground,
+  //                         icon: Icon(
+  //                           Icons.settings,
+  //                           color: Colors.white,
+  //                           size: 30,
+  //                         ),
+  //                         onPressed: () async {
+  //                           await Navigator.push(
+  //                             context,
+  //                             MaterialPageRoute(
+  //                               builder: (context) => SettingsPageWidget(),
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Color(0xFF181818),
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: GestureDetector(
-          //onTap: () => FocusScope.of(context).unfocus(),
-          onTapDown: (details) =>
+          onTap: () => FocusScope.of(context).unfocus(),
+           onTapDown: (details) =>
               _startPeriodicScan(), // When you start touching the screen
           onTapUp: (details) =>
               _stopPeriodicScan(), // When you stop touching the screen
@@ -283,160 +469,284 @@ class _CamViewWidgetState extends State<CamViewWidget>
               _stopPeriodicScan(), // When you stop touching the screen
           child: Stack(
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(0, -0.98),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 20),
-                      child: Container(
-                        width: 340,
-                        height: 480,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF464646),
-                          shape: BoxShape.rectangle,
+              // if (responsiveVisibility(
+              //   context: context,
+              //   tablet: false,
+              //   tabletLandscape: false,
+              //   desktop: false,
+              // ))
+                Align(
+                  alignment: AlignmentDirectional(0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: AlignmentDirectional(0, -0.98),
+                          child: Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
+                            child: Container(
+                              width: double.infinity,
+                              height: 500,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF95A1AC),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: CameraPreview(controller!),
+                              ),
+                            ),
+                          ),
                         ),
-                        child: CameraPreview(controller!),
+
+                        Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                        child: TextFormField(
+                          controller: textController,
+                          // onChanged: (_) => EasyDebounce.debounce(
+                          //   'textController',
+                          //   Duration(milliseconds: 2000),
+                          //   () => setState(() {}),
+                          // ),
+                          onChanged: (String value){
+                            setState(() {
+                          _findText = value;
+                        });
+                          },
+                          autofocus: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            hintText: 'Search....',
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0, 0.78),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                      child: Container(
-                        width: 340,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF323131),
-                          //color: Color(0xFF0000FF),
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: SingleChildScrollView(
+                      Slider(
+                        activeColor: FlutterFlowTheme.of(context).primaryColor,
+                        inactiveColor: Color(0xFF9E9E9E),
+                        min: 0,
+                        max: 10,
+                        value: sliderValue ??= 0,
+                        onChanged: (newValue) {
+                          setState(() => sliderValue = newValue);
+                          if(newValue > 0.1){
+                            controller?.setFocusMode(FocusMode.locked);
+                          }else{
+                            controller?.setFocusMode(FocusMode.auto);
+                          }
+                        },
+                      ),
+                      
+                      Expanded(
+                        child: Align(
+                          alignment: AlignmentDirectional(0, 0.78),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
+                            child: Container(
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 207, 211, 215),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: _buildTextSpanWithSplittedText(
                               _scannedTextAsString,
                               findMode: _findModeActive),
                         ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(-0.94, 0.95),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: 30,
-                          borderWidth: 0,
-                          buttonSize: 40,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: 25,
+                              alignment: AlignmentDirectional(0, 0),
+                            ),
                           ),
-                          onPressed: () {
-                            _searchButtonPressed();
-                          },
                         ),
                       ),
                       Align(
-                        alignment: AlignmentDirectional(-0.47, 0.95),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: 30,
-                          borderWidth: 0,
-                          buttonSize: 40,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          icon: Icon(
-                            Icons.share_sharp,
-                            color: Colors.white,
-                            size: 25,
-                          ),
-                          onPressed: () {
-                            print('shareButton pressed ...');
-                            _shareScannedText();
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional(0, 0.95),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: 30,
-                          borderWidth: 0,
-                          buttonSize: 40,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          icon: Icon(
-                            Icons.photo_size_select_small,
-                            color: Colors.white,
-                            size: 25,
-                          ),
-                          onPressed: () {
-                            print('selectionIcon pressed ...');
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional(0.47, 0.95),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: 30,
-                          borderWidth: 0,
-                          buttonSize: 40,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 25,
-                          ),
-                          onPressed: () {
-                            print('editIcon pressed ...');
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional(0.94, 0.95),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: 30,
-                          borderWidth: 0,
-                          buttonSize: 40,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          icon: Icon(
-                            Icons.settings,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SettingsPageWidget(),
+                        alignment: AlignmentDirectional(0, 0),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Align(
+                                alignment: AlignmentDirectional(-0.94, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: Color(0x00111518),
+                                  icon: Icon(
+                                    Icons.lightbulb,
+                                    color: Color(0xFF6A7986),
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    print('searchButton pressed ...');
+                                     //_searchButtonPressed();
+                                     _torchActive = !_torchActive;
+                                     if(_torchActive){
+                                       controller?.setFlashMode(FlashMode.torch);
+                                     }else{
+                                        controller?.setFlashMode(FlashMode.off);
+                                     }
+                                  },
+                                ),
                               ),
-                            );
-                          },
+                              Align(
+                                alignment: AlignmentDirectional(-0.47, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  icon: Icon(
+                                    Icons.share_sharp,
+                                    color: Color(0xFF6A7986),
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    print('shareButton pressed ...');
+                                    _shareScannedText();
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  icon: Icon(
+                                    Icons.photo_size_select_small,
+                                    color: Color(0xFF6A7986),
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    print('selectionIcon pressed ...');
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0.47, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Color(0xFF6A7986),
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    print('editIcon pressed ...');
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0.47, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  icon: Icon(
+                                    Icons.insert_photo_outlined,
+                                    color: Color(0xFF6A7986),
+                                    size: 30,
+                                  ),
+                                  onPressed: () async {
+                                    print('insertPhotoIcon pressed ...');
+                                    final ImagePicker _picker = ImagePicker();
+                            final XFile? image = await _picker.pickImage(
+                                source: ImageSource.gallery);
+                            final String imagePath = image!.path;
+                            String _ocrTextResult =
+                                await FlutterTesseractOcr.extractText(imagePath,
+                                    language: 'eng',
+                                    args: {
+                                  "psm": "4",
+                                  "preserve_interword_spaces": "1",
+                                });
+                            print(">>>>>>> OCR COMPLETE! THE TEXT SAYS " +
+                                _ocrTextResult);
+                            setState(() {
+                              _scannedTextAsString = _ocrTextResult;
+                            });
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0.94, 0.95),
+                                child: FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: 30,
+                                  borderWidth: 0,
+                                  buttonSize: 40,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: Color(0xFF6A7986),
+                                    size: 30,
+                                  ),
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            SettingsPageWidget(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
             ],
           ),
         ),

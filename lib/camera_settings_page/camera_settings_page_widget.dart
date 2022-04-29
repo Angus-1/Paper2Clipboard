@@ -72,7 +72,7 @@ class _CameraSettingsPageWidgetState extends State<CameraSettingsPageWidget> {
           buttonSize: 60,
           icon: Icon(
             Icons.arrow_back_rounded,
-            color: Colors.white,
+            color: Color.fromARGB(255, 0, 0, 0),
             size: 30,
           ),
           onPressed: () async {

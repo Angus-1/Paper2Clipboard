@@ -32,7 +32,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           buttonSize: 60,
           icon: Icon(
             Icons.arrow_back_rounded,
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
             size: 30,
           ),
           onPressed: () async {

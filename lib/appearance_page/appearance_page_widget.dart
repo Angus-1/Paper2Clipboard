@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../settings_page/settings_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../main.dart';
 
 class AppearancePageWidget extends StatefulWidget {
   const AppearancePageWidget({Key? key}) : super(key: key);
@@ -68,8 +69,12 @@ class _AppearancePageWidgetState extends State<AppearancePageWidget> {
                   borderRadius: BorderRadius.circular(0),
                   child: SwitchListTile(
                     value: lightModeValue ??= true,
-                    onChanged: (newValue) =>
-                        setState(() => lightModeValue = newValue),
+                    // onChanged: (newValue) =>
+                    //     setState(() => lightModeValue = newValue),
+                    onChanged: (newValue) {
+                      setState(() => lightModeValue = newValue);
+                      //MyAppState.setThemeMode();
+                    },
                     title: Text(
                       'Light Mode',
                       style: FlutterFlowTheme.of(context).title3.override(
