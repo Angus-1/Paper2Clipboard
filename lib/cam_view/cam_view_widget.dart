@@ -658,26 +658,26 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                   },
                                 ),
                               ),
-                              Align(
-                                alignment: AlignmentDirectional(0.47, 0.95),
-                                child: FlutterFlowIconButton(
-                                  borderColor: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  borderRadius: 30,
-                                  borderWidth: 0,
-                                  buttonSize: 40,
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Color(0xFF6A7986),
-                                    size: 25,
-                                  ),
-                                  onPressed: () {
-                                    print('editIcon pressed ...');
-                                  },
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: AlignmentDirectional(0.47, 0.95),
+                              //   child: FlutterFlowIconButton(
+                              //     borderColor: FlutterFlowTheme.of(context)
+                              //         .primaryBackground,
+                              //     borderRadius: 30,
+                              //     borderWidth: 0,
+                              //     buttonSize: 40,
+                              //     fillColor: FlutterFlowTheme.of(context)
+                              //         .primaryBackground,
+                              //     icon: Icon(
+                              //       Icons.edit,
+                              //       color: Color(0xFF6A7986),
+                              //       size: 25,
+                              //     ),
+                              //     onPressed: () {
+                              //       print('editIcon pressed ...');
+                              //     },
+                              //   ),
+                              // ),
                               Align(
                                 alignment: AlignmentDirectional(0.47, 0.95),
                                 child: FlutterFlowIconButton(
