@@ -38,17 +38,20 @@ class _HelpPageWidgetState extends State<HelpPageWidget> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
                 'assets/images/demo.png',
                 width: 510,
-                height: 710,
-                fit: BoxFit.cover,
+                height: 600,
+                fit: BoxFit.scaleDown,
               ),
             ],
+            
           ),
+          
         ),
+        
       ),
     );
   }

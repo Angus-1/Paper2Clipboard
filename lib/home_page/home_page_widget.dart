@@ -3,6 +3,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 //import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../settings_page/settings_page_widget.dart';
+import '../help_page/help_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -79,9 +80,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('helpButton pressed ...');
-                  },
+                  onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpPageWidget(),
+                          ),
+                        );
+                      },
                   text: 'Help',
                   options: FFButtonOptions(
                     width: 200,
