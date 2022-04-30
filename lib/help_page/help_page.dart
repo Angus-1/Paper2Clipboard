@@ -1,10 +1,10 @@
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+//import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HelpPageWidget extends StatefulWidget {
-  const HelpPageWidget({Key key}) : super(key: key);
+  const HelpPageWidget({Key? key}) : super(key: key);
 
   @override
   _HelpPageWidgetState createState() => _HelpPageWidgetState();
