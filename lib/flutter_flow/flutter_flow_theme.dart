@@ -44,6 +44,7 @@ abstract class FlutterFlowTheme {
   Color secondaryBackground = const Color(0xFFF1F4F8);
   Color primaryText = Color.fromARGB(255, 172, 38, 38);
   Color secondaryText = Color.fromARGB(255, 150, 39, 39);
+  Color buttonColor = Color.fromARGB(255, 172, 38, 38);
 
   TextStyle get title1 => GoogleFonts.getFont(
         'Poppins',
@@ -98,6 +99,7 @@ class LightModeTheme extends FlutterFlowTheme {
   Color secondaryBackground = const Color(0xFFF1F4F8);
   Color primaryText = Color.fromARGB(255, 249, 249, 249);
   Color secondaryText = Color.fromARGB(255, 49, 145, 219);
+  Color buttonColor = Color.fromARGB(255, 172, 38, 38);
 }
 
 class DarkModeTheme extends FlutterFlowTheme {
@@ -109,6 +111,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   Color secondaryBackground = const Color(0xFF1D2429);
   Color primaryText = Color.fromARGB(255, 255, 255, 255);
   Color secondaryText = Color.fromARGB(255, 48, 140, 226);
+  Color buttonColor = Color.fromARGB(255, 172, 38, 38);
 }
 
 extension TextStyleHelper on TextStyle {
