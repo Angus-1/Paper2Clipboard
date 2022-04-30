@@ -544,7 +544,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                         ),
                       ),
                       Slider(
-                        activeColor: FlutterFlowTheme.of(context).primaryColor,
+                        activeColor: FlutterFlowTheme.of(context).buttonColor,
                         inactiveColor: Color(0xFF9E9E9E),
                         min: 0,
                         max: 10,
