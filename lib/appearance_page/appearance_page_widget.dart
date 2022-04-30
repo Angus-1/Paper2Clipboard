@@ -1,6 +1,7 @@
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-//import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import '../settings_page/settings_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +24,7 @@ class _AppearancePageWidgetState extends State<AppearancePageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D0000),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -56,52 +57,82 @@ class _AppearancePageWidgetState extends State<AppearancePageWidget> {
         centerTitle: false,
         elevation: 2,
       ),
-      backgroundColor: Color(0xFF181818),
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(0),
-                  child: SwitchListTile(
-                    value: lightModeValue ??= true,
-                    // onChanged: (newValue) =>
-                    //     setState(() => lightModeValue = newValue),
-                    onChanged: (newValue) {
-                      setState(() => lightModeValue = newValue);
-                      //MyAppState.setThemeMode();
-                    },
-                    title: Text(
-                      'Light Mode',
-                      style: FlutterFlowTheme.of(context).title3.override(
-                            fontFamily: 'Poppins',
-                            fontSize: 17,
-                          ),
+                padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    setDarkModeSetting(context, ThemeMode.dark);
+                  },
+                  text: 'Dark Mode',
+                  options: FFButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                        ),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
                     ),
-                    tileColor: Color(0xFF950101),
-                    dense: false,
-                    controlAffinity: ListTileControlAffinity.trailing,
+                    borderRadius: 8,
                   ),
                 ),
               ),
-              SwitchListTile(
-                value: switchListTileValue ??= true,
-                onChanged: (newValue) =>
-                    setState(() => switchListTileValue = newValue),
-                title: Text(
-                  'Change Theme Color',
-                  style: FlutterFlowTheme.of(context).title3.override(
-                        fontFamily: 'Poppins',
-                        fontSize: 17,
-                      ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    setDarkModeSetting(context, ThemeMode.light);
+                  },
+                  text: 'Light Mode',
+                  options: FFButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                        ),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: 8,
+                  ),
                 ),
-                tileColor: Color(0xFF950101),
-                dense: false,
-                controlAffinity: ListTileControlAffinity.trailing,
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                child: FFButtonWidget(
+                  onPressed: () {
+                    print('ButtonForDarkMode pressed ...');
+                  },
+                  text: 'Set According to System',
+                  options: FFButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                        ),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: 8,
+                  ),
+                ),
               ),
             ],
           ),

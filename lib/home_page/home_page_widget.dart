@@ -21,7 +21,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF1B1B1B),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         title: Align(
           alignment: AlignmentDirectional(0, 0),
@@ -39,7 +39,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         centerTitle: false,
         elevation: 2,
       ),
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -63,7 +63,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   options: FFButtonOptions(
                     width: 200,
                     height: 40,
-                    color: Color(0xFF1B1B1B),
+                    color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
                           color: Colors.white,
@@ -86,10 +86,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   options: FFButtonOptions(
                     width: 200,
                     height: 40,
-                    color: Color(0xFF1B1B1B),
+                    color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
-                          color: Colors.white,
+                          color: FlutterFlowTheme.of(context).primaryText,
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,
@@ -114,10 +114,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   options: FFButtonOptions(
                     width: 200,
                     height: 40,
-                    color: Color(0xFF1B1B1B),
+                    color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
-                          color: Colors.white,
+                          color: FlutterFlowTheme.of(context).primaryText,
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,

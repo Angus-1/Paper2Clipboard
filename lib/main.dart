@@ -7,7 +7,7 @@ import 'home_page/home_page_widget.dart';
 //import 'test_page/test_page_widget.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
-//import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 //import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/src/services/system_chrome.dart';
@@ -28,9 +28,9 @@ void main() async {
   cameras = await availableCameras();
 
   runApp(MyApp());
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Color.fromARGB(255, 0, 0, 0),
-      systemNavigationBarIconBrightness: Brightness.light));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     systemNavigationBarColor: Color.fromARGB(255, 0, 0, 0),
+  //     systemNavigationBarIconBrightness: Brightness.light));
 }
 
 class MyApp extends StatefulWidget {
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       //themeMode: _themeMode,
-      themeMode: ThemeMode.light,
+      themeMode: _themeMode,
       home: HomePageWidget(),
     );
   }
