@@ -92,14 +92,14 @@ class _CamViewWidgetState extends State<CamViewWidget>
         } else {
           spans.add(TextSpan(
               text: splittedText[i].toString(),
-              style: TextStyle(color: Colors.black, fontSize: _outputFontSize)));
+              style: TextStyle(color: FlutterFlowTheme.of(context).primaryText, fontSize: _outputFontSize)));
         }
       }
     } else {
       spans.add(TextSpan(
           text: textToSplit,
           style: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0), fontSize: _outputFontSize))); // no splitting
+              color: FlutterFlowTheme.of(context).primaryText, fontSize: _outputFontSize))); // no splitting
     }
 
     return Text.rich(TextSpan(children: spans));
@@ -278,182 +278,6 @@ class _CamViewWidgetState extends State<CamViewWidget>
     and where you make other elements display data from variables above.
   */
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     key: scaffoldKey,
-  //     backgroundColor: Color(0xFF181818),
-  //     body: SafeArea(
-  //       child: GestureDetector(
-  //         //onTap: () => FocusScope.of(context).unfocus(),
-  //         onTapDown: (details) =>
-  //             _startPeriodicScan(), // When you start touching the screen
-  //         onTapUp: (details) =>
-  //             _stopPeriodicScan(), // When you stop touching the screen
-  //         onTapCancel: () =>
-  //             _stopPeriodicScan(), // When you stop touching the screen
-  //         child: Stack(
-  //           children: [
-  //             Column(
-  //               mainAxisSize: MainAxisSize.max,
-  //               children: [
-  //                 Align(
-  //                   alignment: AlignmentDirectional(0, -0.98),
-  //                   child: Padding(
-  //                     padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 20),
-  //                     child: Container(
-  //                       width: 340,
-  //                       height: 480,
-  //                       decoration: BoxDecoration(
-  //                         color: Color(0xFF464646),
-  //                         shape: BoxShape.rectangle,
-  //                       ),
-  //                       child: CameraPreview(controller!),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Align(
-  //                   alignment: AlignmentDirectional(0, 0.78),
-  //                   child: Padding(
-  //                     padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-  //                     child: Container(
-  //                       width: 340,
-  //                       height: 120,
-  //                       decoration: BoxDecoration(
-  //                         color: Color(0xFF323131),
-  //                         //color: Color(0xFF0000FF),
-  //                         shape: BoxShape.rectangle,
-  //                       ),
-  //                       child: SingleChildScrollView(
-  //                         scrollDirection: Axis.vertical,
-  //                         child: _buildTextSpanWithSplittedText(
-  //                             _scannedTextAsString,
-  //                             findMode: _findModeActive),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Row(
-  //                   mainAxisSize: MainAxisSize.max,
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                   crossAxisAlignment: CrossAxisAlignment.end,
-  //                   children: [
-  //                     Align(
-  //                       alignment: AlignmentDirectional(-0.94, 0.95),
-  //                       child: FlutterFlowIconButton(
-  //                         borderColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         borderRadius: 30,
-  //                         borderWidth: 0,
-  //                         buttonSize: 40,
-  //                         fillColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         icon: Icon(
-  //                           Icons.search,
-  //                           color: Colors.white,
-  //                           size: 25,
-  //                         ),
-  //                         onPressed: () {
-  //                           _searchButtonPressed();
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Align(
-  //                       alignment: AlignmentDirectional(-0.47, 0.95),
-  //                       child: FlutterFlowIconButton(
-  //                         borderColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         borderRadius: 30,
-  //                         borderWidth: 0,
-  //                         buttonSize: 40,
-  //                         fillColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         icon: Icon(
-  //                           Icons.share_sharp,
-  //                           color: Colors.white,
-  //                           size: 25,
-  //                         ),
-  //                         onPressed: () {
-  //                           print('shareButton pressed ...');
-  //                           _shareScannedText();
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Align(
-  //                       alignment: AlignmentDirectional(0, 0.95),
-  //                       child: FlutterFlowIconButton(
-  //                         borderColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         borderRadius: 30,
-  //                         borderWidth: 0,
-  //                         buttonSize: 40,
-  //                         fillColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         icon: Icon(
-  //                           Icons.photo_size_select_small,
-  //                           color: Colors.white,
-  //                           size: 25,
-  //                         ),
-  //                         onPressed: () {
-  //                           print('selectionIcon pressed ...');
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Align(
-  //                       alignment: AlignmentDirectional(0.47, 0.95),
-  //                       child: FlutterFlowIconButton(
-  //                         borderColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         borderRadius: 30,
-  //                         borderWidth: 0,
-  //                         buttonSize: 40,
-  //                         fillColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         icon: Icon(
-  //                           Icons.edit,
-  //                           color: Colors.white,
-  //                           size: 25,
-  //                         ),
-  //                         onPressed: () {
-  //                           print('editIcon pressed ...');
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Align(
-  //                       alignment: AlignmentDirectional(0.94, 0.95),
-  //                       child: FlutterFlowIconButton(
-  //                         borderColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         borderRadius: 30,
-  //                         borderWidth: 0,
-  //                         buttonSize: 40,
-  //                         fillColor:
-  //                             FlutterFlowTheme.of(context).primaryBackground,
-  //                         icon: Icon(
-  //                           Icons.settings,
-  //                           color: Colors.white,
-  //                           size: 30,
-  //                         ),
-  //                         onPressed: () async {
-  //                           await Navigator.push(
-  //                             context,
-  //                             MaterialPageRoute(
-  //                               builder: (context) => SettingsPageWidget(),
-  //                             ),
-  //                           );
-  //                         },
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -492,7 +316,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                               width: double.infinity,
                               height: 500,
                               decoration: BoxDecoration(
-                                color: Color(0xFF95A1AC),
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                 shape: BoxShape.rectangle,
                               ),
                               child: CameraPreview(controller!),
@@ -515,7 +339,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                           _findText = value;
                         });
                           },
-                          autofocus: true,
+                          autofocus: false,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Search....',
@@ -568,7 +392,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                               width: double.infinity,
                               height: 400,
                               decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 207, 211, 215),
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                 shape: BoxShape.rectangle,
                               ),
                               child: SingleChildScrollView(
@@ -602,7 +426,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                   fillColor: Color(0x00111518),
                                   icon: Icon(
                                     Icons.lightbulb,
-                                    color: Color(0xFF6A7986),
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 25,
                                   ),
                                   onPressed: () {
@@ -629,7 +453,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                       .primaryBackground,
                                   icon: Icon(
                                     Icons.share_sharp,
-                                    color: Color(0xFF6A7986),
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 25,
                                   ),
                                   onPressed: () {
@@ -650,7 +474,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                       .primaryBackground,
                                   icon: Icon(
                                     Icons.photo_size_select_small,
-                                    color: Color(0xFF6A7986),
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 25,
                                   ),
                                   onPressed: () {
@@ -670,7 +494,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                               //         .primaryBackground,
                               //     icon: Icon(
                               //       Icons.edit,
-                              //       color: Color(0xFF6A7986),
+                              //       color: FlutterFlowTheme.of(context).primaryText,
                               //       size: 25,
                               //     ),
                               //     onPressed: () {
@@ -690,7 +514,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                       .primaryBackground,
                                   icon: Icon(
                                     Icons.insert_photo_outlined,
-                                    color: Color(0xFF6A7986),
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 30,
                                   ),
                                   onPressed: () async {
@@ -726,7 +550,7 @@ class _CamViewWidgetState extends State<CamViewWidget>
                                       .primaryBackground,
                                   icon: Icon(
                                     Icons.settings,
-                                    color: Color(0xFF6A7986),
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 30,
                                   ),
                                   onPressed: () async {

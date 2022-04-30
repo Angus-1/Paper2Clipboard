@@ -23,7 +23,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF1B1B1B),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -82,7 +82,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                     options: FFButtonOptions(
                       width: 200,
                       height: 40,
-                      color: Color(0xFF1B1B1B),
+                      color: FlutterFlowTheme.of(context).primaryColor,
                       textStyle:
                           FlutterFlowTheme.of(context).subtitle2.override(
                                 fontFamily: 'Poppins',
@@ -112,7 +112,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                     options: FFButtonOptions(
                       width: 200,
                       height: 40,
-                      color: Color(0xFF1B1B1B),
+                      color: FlutterFlowTheme.of(context).primaryColor,
                       textStyle:
                           FlutterFlowTheme.of(context).subtitle2.override(
                                 fontFamily: 'Poppins',

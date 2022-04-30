@@ -66,7 +66,6 @@ class _MyAppState extends State<MyApp> {
       // supportedLocales: const [Locale('en', '')],
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      //themeMode: _themeMode,
       themeMode: _themeMode,
       home: HomePageWidget(),
     );
