@@ -87,12 +87,13 @@ class _CamViewWidgetState extends State<CamViewWidget>
               text: splittedText[i].toString(),
               style: TextStyle(
                   color: Colors.cyan,
+                  fontFamily: fontFamilyPreference,
                   fontWeight: FontWeight.bold,
                   fontSize: _outputFontSize)));
         } else {
           spans.add(TextSpan(
               text: splittedText[i].toString(),
-              style: TextStyle(color: FlutterFlowTheme.of(context).primaryText, fontSize: _outputFontSize)));
+              style: TextStyle(color: FlutterFlowTheme.of(context).primaryText, fontFamily: fontFamilyPreference, fontSize: _outputFontSize)));
         }
       }
     } else {

@@ -89,7 +89,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
-                          color: FlutterFlowTheme.of(context).primaryText,
+                          color: Colors.white,
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,
@@ -117,7 +117,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Poppins',
-                          color: FlutterFlowTheme.of(context).primaryText,
+                          color: Colors.white,
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,

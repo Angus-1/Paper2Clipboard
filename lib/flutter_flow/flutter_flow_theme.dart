@@ -96,8 +96,8 @@ class LightModeTheme extends FlutterFlowTheme {
   Color tertiaryColor = const Color(0xFFEE8B60);
   Color alternate = Color.fromARGB(255, 85, 85, 85);
   Color primaryBackground = Color(0xFFFFFFFF);
-  Color secondaryBackground = Color.fromARGB(255, 192, 195, 199);
-  Color primaryText = Color.fromARGB(255, 249, 249, 249);
+  Color secondaryBackground = Color.fromARGB(255, 228, 230, 233);
+  Color primaryText = Color.fromARGB(255, 0, 0, 0);
   Color secondaryText = Color.fromARGB(255, 49, 145, 219);
   Color buttonColor = Color.fromARGB(255, 172, 38, 38);
 }

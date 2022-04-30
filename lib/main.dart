@@ -19,6 +19,9 @@ List<CameraDescription> cameras = <CameraDescription>[];
 // Resolution preference
 ResolutionPreset resolutionPreference = ResolutionPreset.low;
 
+// Font family preference
+String fontFamilyPreference = "Roboto";
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

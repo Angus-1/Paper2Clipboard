@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../settings_page/settings_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../flutter_flow/flutter_flow_radio_button.dart';
 import '../main.dart';
 
 class AppearancePageWidget extends StatefulWidget {
@@ -17,6 +18,7 @@ class AppearancePageWidget extends StatefulWidget {
 class _AppearancePageWidgetState extends State<AppearancePageWidget> {
   bool lightModeValue = false;
   bool switchListTileValue = false;
+  String radioButtonValue = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -132,6 +134,43 @@ class _AppearancePageWidgetState extends State<AppearancePageWidget> {
                     ),
                     borderRadius: 8,
                   ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(5, 20, 0, 0),
+                child: Text(
+                  'Font',
+                  style: FlutterFlowTheme.of(context).subtitle1.override(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                      ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                child: FlutterFlowRadioButton(
+                  options: [
+                    'Poppins',
+                    'AtkinsonHyperlegible',
+                    'Raleway',
+                  ].toList(),
+                  onChanged: (value) {
+                    setState(() => radioButtonValue = value.toString());
+                    fontFamilyPreference = value.toString();
+                  },
+                  optionHeight: 25,
+                  textStyle: FlutterFlowTheme.of(context).bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                      ),
+                  buttonPosition: RadioButtonPosition.left,
+                  direction: Axis.vertical,
+                  radioButtonColor: Color(0xFF950101),
+                  inactiveRadioButtonColor:
+                      FlutterFlowTheme.of(context).secondaryText,
+                  toggleable: false,
+                  horizontalAlignment: WrapAlignment.start,
+                  verticalAlignment: WrapCrossAlignment.start,
                 ),
               ),
             ],
